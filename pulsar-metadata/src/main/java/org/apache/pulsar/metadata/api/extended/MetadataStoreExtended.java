@@ -42,7 +42,7 @@ public interface MetadataStoreExtended extends MetadataStore {
         MetadataStore store = MetadataStoreFactory.create(metadataURL, metadataStoreConfig);
         if (!(store instanceof MetadataStoreExtended)) {
             throw new InvalidImplementationException(
-                    "Implemetation does not comply with " + MetadataStoreExtended.class.getName());
+                    "Implementation does not comply with " + MetadataStoreExtended.class.getName());
         }
 
         return (MetadataStoreExtended) store;

@@ -29,19 +29,23 @@ import org.apache.pulsar.common.policies.data.ConsumerStats;
 import org.apache.pulsar.common.policies.data.ReplicatorStats;
 import org.apache.pulsar.common.util.SimpleTextOutputStream;
 
-public class NamespaceStatsAggregator {
+public final class NamespaceStatsAggregator {
 
-    private static FastThreadLocal<AggregatedNamespaceStats> localNamespaceStats =
+    private NamespaceStatsAggregator() {
+        // No public constructor
+    }
+
+    private static final FastThreadLocal<AggregatedNamespaceStats> localNamespaceStats =
             new FastThreadLocal<AggregatedNamespaceStats>() {
                 @Override
-                protected AggregatedNamespaceStats initialValue() throws Exception {
+                protected AggregatedNamespaceStats initialValue() {
                     return new AggregatedNamespaceStats();
                 }
             };
 
-    private static FastThreadLocal<TopicStats> localTopicStats = new FastThreadLocal<TopicStats>() {
+    private static final FastThreadLocal<TopicStats> localTopicStats = new FastThreadLocal<TopicStats>() {
         @Override
-        protected TopicStats initialValue() throws Exception {
+        protected TopicStats initialValue() {
             return new TopicStats();
         }
     };

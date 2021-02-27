@@ -20,7 +20,6 @@ package org.apache.pulsar.broker.stats.prometheus;
 
 import static org.apache.bookkeeper.mledger.util.SafeRun.safeRun;
 import io.netty.util.concurrent.DefaultThreadFactory;
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -36,14 +35,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class PrometheusMetricsServlet extends HttpServlet {
-
     private static final long serialVersionUID = 1L;
 
     private final PulsarService pulsar;
     private final boolean shouldExportTopicMetrics;
     private final boolean shouldExportConsumerMetrics;
     private final boolean shouldExportProducerMetrics;
-    private List<PrometheusRawMetricsProvider> metricsProviders;
+    private final List<PrometheusRawMetricsProvider> metricsProviders = new LinkedList<>();
 
     private ExecutorService executor = null;
 
@@ -61,8 +59,7 @@ public class PrometheusMetricsServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         AsyncContext context = request.startAsync();
         executor.execute(safeRun(() -> {
             HttpServletResponse res = (HttpServletResponse) context.getResponse();
@@ -72,7 +69,6 @@ public class PrometheusMetricsServlet extends HttpServlet {
                 PrometheusMetricsGenerator.generate(pulsar, shouldExportTopicMetrics, shouldExportConsumerMetrics,
                         shouldExportProducerMetrics, res.getOutputStream(), metricsProviders);
                 context.complete();
-
             } catch (Exception e) {
                 log.error("Failed to generate prometheus stats", e);
                 res.setStatus(HttpStatus.INTERNAL_SERVER_ERROR_500);
@@ -89,9 +85,6 @@ public class PrometheusMetricsServlet extends HttpServlet {
     }
 
     public void addRawMetricsProvider(PrometheusRawMetricsProvider metricsProvider) {
-        if (metricsProviders == null) {
-            metricsProviders = new LinkedList<>();
-        }
         metricsProviders.add(metricsProvider);
     }
 

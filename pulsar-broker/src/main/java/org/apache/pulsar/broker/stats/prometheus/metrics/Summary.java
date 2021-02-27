@@ -103,13 +103,13 @@ public class Summary extends SimpleCollector<Summary.Child> implements Collector
 
     @Override
     public List<MetricFamilySamples> collect() {
-        List<MetricFamilySamples.Sample> samples = new ArrayList<MetricFamilySamples.Sample>();
+        List<MetricFamilySamples.Sample> samples = new ArrayList<>();
         for (Map.Entry<List<String>, Child> c : children.entrySet()) {
             Child child = c.getValue();
-            List<String> labelNamesWithQuantile = new ArrayList<String>(labelNames);
+            List<String> labelNamesWithQuantile = new ArrayList<>(labelNames);
             labelNamesWithQuantile.add("quantile");
             for (Double q : child.quantiles) {
-                List<String> labelValuesWithQuantile = new ArrayList<String>(c.getKey());
+                List<String> labelValuesWithQuantile = new ArrayList<>(c.getKey());
                 labelValuesWithQuantile.add(doubleToGoString(q));
                 samples.add(new MetricFamilySamples.Sample(fullname, labelNamesWithQuantile, labelValuesWithQuantile,
                         child.logger.getQuantileValue(q)));

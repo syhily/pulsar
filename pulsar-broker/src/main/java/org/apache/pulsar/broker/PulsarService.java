@@ -260,7 +260,7 @@ public class PulsarService implements AutoCloseable {
         if (result != null) {
             this.advertisedListeners = Collections.unmodifiableMap(result);
         } else {
-            this.advertisedListeners = Collections.unmodifiableMap(Collections.emptyMap());
+            this.advertisedListeners = Collections.emptyMap();
         }
         state = State.Init;
         // use `internalListenerName` listener as `advertisedAddress`

@@ -67,6 +67,7 @@ import org.apache.bookkeeper.mledger.impl.PositionImpl;
 import org.apache.pulsar.broker.PulsarServerException;
 import org.apache.pulsar.broker.ServiceConfiguration;
 import org.apache.pulsar.broker.admin.AdminResource;
+import org.apache.pulsar.broker.intercept.ManagedLedgerInterceptorImpl;
 import org.apache.pulsar.broker.resources.NamespaceResources.PartitionedTopicResources;
 import org.apache.pulsar.broker.service.AbstractTopic;
 import org.apache.pulsar.broker.service.BrokerService;
@@ -780,6 +781,12 @@ public class PersistentTopic extends AbstractTopic
             }
         });
 
+    }
+
+    @Override
+    public long getMsgInCounter() {
+        ManagedLedgerInterceptorImpl interceptor = (ManagedLedgerInterceptorImpl) ledger.getManagedLedgerInterceptor();
+        return interceptor.getIndex();
     }
 
     private CompletableFuture<Subscription> getDurableSubscription(String subscriptionName,

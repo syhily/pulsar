@@ -46,7 +46,6 @@ import org.apache.pulsar.metadata.api.MetadataStoreException.ContentDeserializat
 import org.apache.pulsar.metadata.api.MetadataStoreException.NotFoundException;
 import org.apache.pulsar.metadata.api.Notification;
 import org.apache.pulsar.metadata.api.Stat;
-import org.checkerframework.checker.nullness.Opt;
 
 public class MetadataCacheImpl<T> implements MetadataCache<T>, Consumer<Notification> {
 
